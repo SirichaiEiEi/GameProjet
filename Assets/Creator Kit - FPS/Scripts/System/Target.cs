@@ -5,6 +5,7 @@ using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 using UnityEngine.UI;
 using Quaternion = UnityEngine.Quaternion;
+using TMPro;
 
 public class Target : MonoBehaviour
 {
@@ -12,6 +13,10 @@ public class Target : MonoBehaviour
     public GameObject popup;
     public GameObject pointpopup;
     public int pointValue;
+    public Slider SLD;
+    public int maxHealth;
+    public int currentHealth;
+    public TextMeshProUGUI Textheal;
 
     public ParticleSystem DestroyedEffect;
 
@@ -24,8 +29,6 @@ public class Target : MonoBehaviour
     bool m_Destroyed = false;
     float m_CurrentHealth;
 
-    [SerializeField] private healbar heala;
-
 
     void Awake()
     {
@@ -34,14 +37,14 @@ public class Target : MonoBehaviour
     
     void Start()
     {
-        heala = GameObject.Find("Canvas").GetComponent<healbar>();
+        Textheal = GameObject.Find("Text1").GetComponent<TextMeshProUGUI>();
         popup = GameObject.Find("FloatingParent");
         pointpopup = GameObject.Find("FloatingParent1");
+        SLD = GameObject.Find("Slider").GetComponent<Slider>();
         if (DestroyedEffect)
             PoolSystem.Instance.InitPool(DestroyedEffect, 16);
         
         m_CurrentHealth = health;
-        heala.UpdateHealthbar(health, m_CurrentHealth);
         if (IdleSource != null)
             IdleSource.time = Random.Range(0.0f, IdleSource.clip.length);
     }
@@ -51,11 +54,12 @@ public class Target : MonoBehaviour
     {
         ShowDamage(damage.ToString());
         m_CurrentHealth -= damage;
-
+        SLD.maxValue = health;
+        SLD.value = m_CurrentHealth;
+        Textheal.text = m_CurrentHealth.ToString() + " / " + health.ToString();
 
         if (HitPlayer != null)
             HitPlayer.PlayRandom();
-            heala.UpdateHealthbar(health, m_CurrentHealth);
 
         if (m_CurrentHealth > 0)
             return;
