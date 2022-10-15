@@ -63,6 +63,8 @@ public class Target : MonoBehaviour
     {
         ShowDamage(damage.ToString());
         m_CurrentHealth -= damage;
+        agent.SetDestination(player.transform.position);
+        transform.LookAt(player.transform);
 
         if (HitPlayer != null)
             HitPlayer.PlayRandom();
@@ -95,7 +97,7 @@ public class Target : MonoBehaviour
         gameObject.SetActive(false);
        
         GameSystem.Instance.TargetDestroyed(pointValue);
-        ShowPoint(pointValue.ToString(pointValue+"Point"));
+        ShowPoint(pointValue.ToString(pointValue + "Point"));
     }
     void ShowDamage(string text)
     {
