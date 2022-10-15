@@ -4,19 +4,20 @@ using System.Numerics;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 using UnityEngine.UI;
+using UnityEngine.AI;
 using Quaternion = UnityEngine.Quaternion;
 using TMPro;
+using UnityEngine.Events;
 
 public class Target : MonoBehaviour
 {
-    private float health = 5.0f;
+    public float health = 5.0f;
+    NavMeshAgent agent;
+    public GameObject player;
+    Animator anim;
     public GameObject popup;
     public GameObject pointpopup;
     public int pointValue;
-    public Slider SLD;
-    public int maxHealth;
-    public int currentHealth;
-    public TextMeshProUGUI Textheal;
 
     public ParticleSystem DestroyedEffect;
 
@@ -27,7 +28,7 @@ public class Target : MonoBehaviour
     public bool Destroyed => m_Destroyed;
 
     bool m_Destroyed = false;
-    float m_CurrentHealth;
+    public float m_CurrentHealth;
 
 
     void Awake()
@@ -37,10 +38,11 @@ public class Target : MonoBehaviour
     
     void Start()
     {
-        Textheal = GameObject.Find("Text1").GetComponent<TextMeshProUGUI>();
+        agent = GetComponent<NavMeshAgent>();
+        player = GameObject.FindGameObjectWithTag("Player");
+        anim = GetComponent<Animator>();
         popup = GameObject.Find("FloatingParent");
         pointpopup = GameObject.Find("FloatingParent1");
-        SLD = GameObject.Find("Slider").GetComponent<Slider>();
         if (DestroyedEffect)
             PoolSystem.Instance.InitPool(DestroyedEffect, 16);
         
@@ -49,14 +51,18 @@ public class Target : MonoBehaviour
             IdleSource.time = Random.Range(0.0f, IdleSource.clip.length);
     }
 
+    void Update()
+    {
+        float dist = Vector3.Distance(transform.position, player.transform.position);
+        if (dist <= 10.5f) 
+            agent.SetDestination(player.transform.position);
+        transform.LookAt(player.transform);
+    }
 
     public void Got(float damage)
     {
         ShowDamage(damage.ToString());
         m_CurrentHealth -= damage;
-        SLD.maxValue = health;
-        SLD.value = m_CurrentHealth;
-        Textheal.text = m_CurrentHealth.ToString() + " / " + health.ToString();
 
         if (HitPlayer != null)
             HitPlayer.PlayRandom();

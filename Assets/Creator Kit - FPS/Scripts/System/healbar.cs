@@ -2,24 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class healbar : MonoBehaviour
 {
-    public Slider SLD;
-    public int maxHealth;
-    public int currentHealth;
-    public TextMeshProUGUI Textheal;
-
+    private Image healthbar;
+    public Target dddd;
 
     void Start()
     {
-        currentHealth = maxHealth;
+        healthbar = GetComponent<Image>();   
     }
     void Update()
     {
-        SLD.maxValue = maxHealth;
-        SLD.value = currentHealth;
-        Textheal.text = currentHealth.ToString() + " / " + maxHealth.ToString();
+        healthbar.fillAmount = dddd.m_CurrentHealth / dddd.health;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
