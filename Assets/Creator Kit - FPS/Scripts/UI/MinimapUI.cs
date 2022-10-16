@@ -61,4 +61,30 @@ public class MinimapUI : MonoBehaviour
             Arrow.rotation = Quaternion.identity;
         }
     }
+    public void UpdateForTargetTransform(Transform targetTransform)
+    {
+        if (!m_HeightWasInited)
+        {
+            m_HeightWasInited = true;
+            m_InitialHeight = targetTransform.position.y;
+        }
+
+        Vector3 trtgetPosition = targetTransform.position;
+        float heightDifference = m_InitialHeight - trtgetPosition.y;
+        float heightSign = Mathf.Sign(heightDifference);
+        heightDifference = Mathf.FloorToInt(Mathf.Abs(heightDifference / MinimapSystemSettings.heightStep)) * heightSign * heightDifference;
+
+        trtgetPosition.y = m_InitialHeight + heightDifference;
+
+        MinimapSystem.Render(m_RT, trtgetPosition, targetTransform.forward, MinimapSystemSettings);
+
+        if (MinimapSystemSettings.isFixed)
+        {
+            Arrow.rotation = Quaternion.Euler(0, 0, Vector3.SignedAngle(targetTransform.forward, Vector3.forward, Vector3.up));
+        }
+        else
+        {
+            Arrow.rotation = Quaternion.identity;
+        }
+    }
 }

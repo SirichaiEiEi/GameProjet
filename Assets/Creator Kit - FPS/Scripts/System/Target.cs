@@ -11,7 +11,10 @@ using UnityEngine.Events;
 
 public class Target : MonoBehaviour
 {
-    public float health = 5.0f;
+    [SerializeField] public float health;
+    public TextMeshProUGUI text3;
+    int minHealth = 1;
+    int maxHealth = 100;
     NavMeshAgent agent;
     public GameObject player;
     Animator anim;
@@ -38,6 +41,47 @@ public class Target : MonoBehaviour
     
     void Start()
     {
+        health = Random.Range(minHealth, maxHealth);
+        if (health <= 10)
+        {
+            text3.text = "Lv 1";
+        }
+        if (health >= 11 && health < 20)
+        {
+            text3.text = "Lv 2";
+        }
+        if (health >= 20 && health < 30)
+        {
+            text3.text = "Lv 3";
+        }
+        if (health >= 30 && health < 40)
+        {
+            text3.text = "Lv 4";
+        }
+        if (health >= 40 && health < 50)
+        {
+            text3.text = "Lv 5";
+        }
+        if (health >= 50 && health < 60)
+        {
+            text3.text = "Lv 6";
+        }
+        if (health >= 60 && health < 70)
+        {
+            text3.text = "Lv 7";
+        }
+        if (health >= 70 && health < 80)
+        {
+            text3.text = "Lv 8";
+        }
+        if (health >= 80 && health < 20)
+        {
+            text3.text = "Lv 9";
+        }
+        if (health >= 90)
+        {
+            text3.text = "Lv 10";
+        }
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
         anim = GetComponent<Animator>();

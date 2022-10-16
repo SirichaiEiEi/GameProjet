@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EndCheckpoint : MonoBehaviour
 {
+    public Controller hpa;
     void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Controller>() == null)

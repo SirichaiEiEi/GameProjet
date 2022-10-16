@@ -31,7 +31,7 @@ public class GameSystem : MonoBehaviour
     int m_TargetCount;
     int m_TargetDestroyed;
 
-    int m_Score = 0;
+    public int m_Score = 0;
 
     void Awake()
     {
@@ -190,6 +190,7 @@ public class GameSystem : MonoBehaviour
        
         if(FullscreenMap.Instance.gameObject.activeSelf)
             FullscreenMap.Instance.UpdateForPlayerTransform(playerTransform);
+        end();
     }
 
     public float GetFinalTime()
@@ -208,5 +209,13 @@ public class GameSystem : MonoBehaviour
         m_Score += score;
 
         GameSystemInfo.Instance.UpdateScore(m_Score);
+    }
+    void end()
+    {
+        if(m_Timer == 10.00f)
+        {
+            GameSystem.Instance.StopTimer();
+            GameSystem.Instance.FinishRun();
+        }
     }
 }
