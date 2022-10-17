@@ -74,7 +74,7 @@ public class Target : MonoBehaviour
         {
             text3.text = "Lv 8";
         }
-        if (health >= 80 && health < 20)
+        if (health >= 80 && health < 90)
         {
             text3.text = "Lv 9";
         }
