@@ -13,6 +13,8 @@ public class Target : MonoBehaviour
 {
     [SerializeField] public float health;
     public TextMeshProUGUI text3;
+    float bulletSpeed = 100;
+    public GameObject bullet;
     int minHealth = 1;
     int maxHealth = 100;
     NavMeshAgent agent;
@@ -21,6 +23,9 @@ public class Target : MonoBehaviour
     public GameObject popup;
     public GameObject pointpopup;
     public int pointValue;
+    public LineRenderer line;
+    public Transform pos1;
+    public Transform pos2;
 
     public ParticleSystem DestroyedEffect;
 
@@ -34,13 +39,23 @@ public class Target : MonoBehaviour
     public float m_CurrentHealth;
 
 
+
     void Awake()
     {
         Helpers.RecursiveLayerChange(transform, LayerMask.NameToLayer("Target"));
     }
-    
+
+    void Fire()
+    {
+        GameObject tempBullet = Instantiate(bullet, transform.position, transform.rotation) as GameObject;
+        Rigidbody tempRigidBodyBullet = tempBullet.GetComponent<Rigidbody>();
+        tempRigidBodyBullet.AddForce(tempRigidBodyBullet.transform.forward);
+        Destroy(tempBullet, 2f);
+    }
+
     void Start()
     {
+        pos2 = GameObject.Find("Character").transform.GetComponent<Transform>();
         health = Random.Range(minHealth, maxHealth);
         if (health <= 10)
         {
@@ -98,9 +113,28 @@ public class Target : MonoBehaviour
     void Update()
     {
         float dist = Vector3.Distance(transform.position, player.transform.position);
-        if (dist <= 10.5f) 
+        if (dist <= 3f)
+        {
             agent.SetDestination(player.transform.position);
-        transform.LookAt(player.transform);
+            transform.LookAt(player.transform);
+        }
+        if (dist <= 10.5f)
+        {
+            Fire();
+            agent.SetDestination(player.transform.position);
+            transform.LookAt(player.transform);
+        }
+    }
+    void attrak()
+    {
+        if (FindObjectOfType<status>().hp <= 0)
+        {
+            FindObjectOfType<status>().hp -= 0;
+        }
+        else
+        {
+            FindObjectOfType<status>().hp -= 0.1f;
+        }
     }
 
     public void Got(float damage)

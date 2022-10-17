@@ -24,15 +24,8 @@ public class status : MonoBehaviour
     void Update()
     {
         imgHP.fillAmount = hp / 100;
-        text1.text = "HP : " + hp.ToString();
-        death();
-    }
-    void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        if (hit.gameObject.tag == "target")
-        {
-            hp -= 0.01f;
-        }
+        text1.text = "HP : " + ((int)hp).ToString();
+        death();  
     }
     void death()
     {
@@ -41,5 +34,9 @@ public class status : MonoBehaviour
             GameSystem.Instance.StopTimer();
             GameSystem.Instance.FinishRun();
         }
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        hp -= 1;
     }
 }
